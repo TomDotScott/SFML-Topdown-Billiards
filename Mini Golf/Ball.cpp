@@ -18,6 +18,8 @@ void Ball::Update(const float deltaTime)
 		// TODO: Take mouse input
 		break;
 	case eBallState::e_moving:
+		m_velocity.x < 0 ? m_velocity.x += constants::k_friction * deltaTime : m_velocity.x -= constants::k_friction * deltaTime;
+		m_velocity.y < 0 ? m_velocity.y += constants::k_friction * deltaTime : m_velocity.y -= constants::k_friction * deltaTime;
 
 		m_position.x += m_velocity.x * deltaTime;
 		m_position.y += m_velocity.y * deltaTime;
