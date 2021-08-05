@@ -1,7 +1,5 @@
 #pragma once
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/System/Vector2.hpp>
+#include <SFML/Graphics.hpp>
 
 enum class eBallState
 {
@@ -12,7 +10,7 @@ class Ball
 {
 public:
 	explicit Ball(const sf::Vector2f& position);
-	void Update(float deltaTime);
+	void Update(float deltaTime, int mouseX, int mouseY, bool mousePressed);
 	void Render(sf::RenderWindow& window);
 
 private:
@@ -20,6 +18,6 @@ private:
 	sf::Vector2f m_position;
 	sf::Vector2f m_velocity;
 	eBallState m_ballState;
-
+	bool m_selected;
 };
 

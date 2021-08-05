@@ -31,9 +31,10 @@ int main()
 		float deltaTime = clock.getElapsedTime().asSeconds();
 		clock.restart();
 
-		ball.Update(deltaTime);
+		const sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
+		ball.Update(deltaTime, mousePosition.x, mousePosition.y, sf::Mouse::isButtonPressed(sf::Mouse::Button::Left));
 		
-		window.clear();
+		window.clear({0, 100, 0});
 
 
 		ball.Render(window);
