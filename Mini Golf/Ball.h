@@ -10,14 +10,20 @@ class Ball
 {
 public:
 	explicit Ball(const sf::Vector2f& position);
-	void Update(float deltaTime, int mouseX, int mouseY, bool mousePressed);
+	void Update(float deltaTime);
 	void Render(sf::RenderWindow& window);
+
+	void Shoot(const sf::Vector2f& velocity);
+
+	void SetState(eBallState state);
+	eBallState GetState() const;
+
+	sf::Vector2f GetPosition() const;
 
 private:
 	sf::CircleShape m_ball;
 	sf::Vector2f m_position;
 	sf::Vector2f m_velocity;
 	eBallState m_ballState;
-	bool m_selected;
 };
 

@@ -2,17 +2,14 @@
 
 #include "Ball.h"
 #include "Constants.h"
+#include "Game.h"
 #include "SFML/Graphics.hpp"
 
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(constants::k_screenWidth, constants::k_screenHeight), "Minigolf");
 
-	Ball ball({
-		static_cast<float>(constants::k_screenWidth) / 2.f,
-		static_cast<float>(constants::k_screenHeight) / 2.f
-		}
-	);
+	Game game;
 
 	sf::Clock clock;
 
@@ -32,12 +29,11 @@ int main()
 		clock.restart();
 
 		const sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
-		ball.Update(deltaTime, mousePosition.x, mousePosition.y, sf::Mouse::isButtonPressed(sf::Mouse::Button::Left));
 		
 		window.clear({0, 100, 0});
 
-
-		ball.Render(window);
+		game.Update(deltaTime, mousePosition.x, mousePosition.y, sf::Mouse::isButtonPressed(sf::Mouse::Button::Left));
+		game.Render(window);
 
 
 		window.display();
