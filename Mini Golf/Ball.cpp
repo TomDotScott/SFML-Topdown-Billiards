@@ -1,5 +1,6 @@
 #include "Ball.h"
 #include "Constants.h"
+#include "HelperFunctions.h"
 
 Ball::Ball(const sf::Vector2f& position) :
 	m_position(position),
@@ -30,12 +31,22 @@ void Ball::Update(const float deltaTime, const int mouseX, const int mouseY, con
 
 
 			if (m_selected) {
+				// The distance between the ball and the mouse
 				const float mag = sqrtf(sqrDistance);
+
+				// Vector pointing in the right direction
 				m_velocity = mouseToBall / mag;
 
-				m_velocity *= 100.f;
+				// Clamp the distance dragged between the min and max
+				float clampedDistance = helpers::clamp(constants::k_minMouseDistance, constants::k_maxMouseDistance, mag);
 
-				printf("MOUSE POSITION: (%i, %i)\nBALL CENTRE: (%f, %f)\nSQR DISTANCE: %f\nDISTANCE: %f\nNew velocity: (%f, %f)\n\n", mouseX, mouseY, ballCentre.x, ballCentre.y, sqrDistance, sqrtf(sqrDistance), m_velocity.x, m_velocity.y);
+				clampedDistance *= constants::k_velocityMultiplier;
+
+				m_velocity *= clampedDistance;
+				printf("Distance between mouse and ball: %f\n\n\n", mag);
+
+
+				// printf("MOUSE POSITION: (%i, %i)\nBALL CENTRE: (%f, %f)\nSQR DISTANCE: %f\nDISTANCE: %f\nNew velocity: (%f, %f)\n\n", mouseX, mouseY, ballCentre.x, ballCentre.y, sqrDistance, sqrtf(sqrDistance), m_velocity.x, m_velocity.y);
 
 			}else
 			{
@@ -80,6 +91,10 @@ void Ball::Update(const float deltaTime, const int mouseX, const int mouseY, con
 			m_velocity = { 0.f, 0.f };
 			m_ballState = eBallState::e_stationary;
 		}
+
+
+		printf("Velocity: (%f, %f)\n", m_velocity.x, m_velocity.y);
+
 
 		break;
 	default:
