@@ -9,7 +9,8 @@ Game::Game() :
 	static_cast<float>(constants::k_screenWidth) / 2.f,
 		static_cast<float>(constants::k_screenHeight) / 2
 		}),
-	m_isBallSelected(false)
+	m_isBallSelected(false),
+	m_powerBar({ 6.f, 40.f })
 {
 }
 
@@ -22,6 +23,22 @@ void Game::Update(const float deltaTime, const int mouseX, const int mouseY, con
 void Game::Render(sf::RenderWindow& window)
 {
 	m_ball.Render(window);
+
+	// Render the power bar next to the ball
+	if (m_isBallSelected) {
+		sf::RectangleShape powerBarOutline({ 8.f, -40.f });
+		powerBarOutline.setFillColor(sf::Color::Black);
+
+		float powerBarXPosition = m_ball.GetPosition().x + 25.f;
+		float powerBarYPosition = m_ball.GetPosition().y + 2 * constants::k_ballRadius;
+
+		powerBarOutline.setPosition({ powerBarXPosition, powerBarYPosition });
+		window.draw(powerBarOutline);
+
+		m_powerBar.setPosition({ powerBarXPosition + 1.f, powerBarYPosition + 1.f });
+
+		window.draw(m_powerBar);
+	}
 }
 
 void Game::UpdateInput(const int mouseX, const int mouseY, const bool mousePressed)
@@ -48,15 +65,17 @@ void Game::UpdateInput(const int mouseX, const int mouseY, const bool mousePress
 				m_ballShootVelocity = mouseToBall / mag;
 
 				// Clamp the distance dragged between the min and max
-				float clampedDistance = helpers::clamp(constants::k_minMouseDistance, constants::k_maxMouseDistance, mag);
+				const float clampedDistance = helpers::clamp(constants::k_minMouseDistance, constants::k_maxMouseDistance, mag);
 
-				clampedDistance *= constants::k_velocityMultiplier;
+				m_ballShootVelocity *= clampedDistance * constants::k_velocityMultiplier;
 
-				m_ballShootVelocity *= clampedDistance;
+				// Adjust power bar
+				const float powerPercentage = clampedDistance / constants::k_maxMouseDistance;
+				const float lerpedPowerBarHeight = helpers::lerp(1.f, 38.f, powerPercentage);
 
-				printf("Distance between mouse and ball: %f\n\n\n", mag);
+				m_powerBar.setSize({ m_powerBar.getSize().x, -lerpedPowerBarHeight });
 
-
+				//printf("Distance between mouse and ball: %f\n\n\n", mag);
 			}
 			else
 			{

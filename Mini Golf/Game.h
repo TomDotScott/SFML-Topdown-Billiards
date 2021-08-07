@@ -15,6 +15,8 @@ private:
 	sf::Vector2f m_ballShootVelocity;
 	bool m_isBallSelected;
 
+	sf::RectangleShape m_powerBar;
+
 	void UpdateInput(int mouseX, int mouseY, bool mousePressed);
 };
 
