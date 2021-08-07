@@ -6,6 +6,7 @@ namespace constants
 	constexpr int k_screenHeight = 800;
 
 	constexpr float k_friction = 100.f;
+	constexpr float k_bounceDampen = 0.85f;
 	constexpr float k_ballRadius = 10.f;
 
 	constexpr float k_minMouseDistance = 15.f;

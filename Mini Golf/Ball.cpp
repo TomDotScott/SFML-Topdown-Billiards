@@ -17,28 +17,27 @@ void Ball::Update(const float deltaTime)
 		m_velocity.x < 0 ? m_velocity.x += constants::k_friction * deltaTime : m_velocity.x -= constants::k_friction * deltaTime;
 		m_velocity.y < 0 ? m_velocity.y += constants::k_friction * deltaTime : m_velocity.y -= constants::k_friction * deltaTime;
 
-		m_position.x += m_velocity.x * deltaTime;
-		m_position.y += m_velocity.y * deltaTime;
+		m_position = m_position + (m_velocity * deltaTime);
 
 		// Check Boundaries
-		if (m_position.x < 0 || m_position.x > constants::k_screenWidth - (constants::k_ballRadius * 2))
+		if (m_position.x < 0.f && m_velocity.x < 0.f || m_position.x > constants::k_screenWidth - constants::k_ballRadius * 2 && m_velocity.x > 0.f)
 		{
-			m_velocity.x *= -1;
+			m_velocity.x *= -constants::k_bounceDampen;
 		}
 
-		if (m_position.y < 0 || m_position.y > constants::k_screenHeight - (constants::k_ballRadius * 2))
+		if (m_position.y < 0.f && m_velocity.y < 0.f || m_position.y > constants::k_screenHeight - constants::k_ballRadius * 2 && m_velocity.y > 0.f)
 		{
-			m_velocity.y *= -1;
+			m_velocity.y *= -constants::k_bounceDampen;
 		}
 
-		if ((m_velocity.x * m_velocity.x) + (m_velocity.y * m_velocity.y) < 0.01f)
+		if ((m_velocity.x * m_velocity.x) + (m_velocity.y * m_velocity.y) < 0.001f)
 		{
 			m_velocity = { 0.f, 0.f };
 			m_ballState = eBallState::e_stationary;
 		}
 
 
-		printf("Velocity: (%f, %f)\n", m_velocity.x, m_velocity.y);
+		// printf("Velocity: (%f, %f)\n", m_velocity.x, m_velocity.y);
 	}
 }
 
