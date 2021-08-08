@@ -2,8 +2,8 @@
 
 namespace constants
 {
-	constexpr int k_screenWidth = 400;
-	constexpr int k_screenHeight = 800;
+	constexpr int k_screenWidth = 720;
+	constexpr int k_screenHeight = 480;
 
 	constexpr float k_friction = 100.f;
 	constexpr float k_bounceDampen = 0.85f;

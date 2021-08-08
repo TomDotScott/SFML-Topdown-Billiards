@@ -19,4 +19,40 @@ namespace helpers
 	{
 		return (t - a) / (b - a);
 	}
+
+	inline float sqr_magnitude(const sf::Vector2f v)
+	{
+		return std::powf(v.x, 2) + std::powf(v.y, 2);
+	}
+
+	inline float magnitude(const sf::Vector2f v)
+	{
+		return std::sqrtf(sqr_magnitude(v));
+	}
+
+	inline sf::Vector2f normalise(const sf::Vector2f v)
+	{
+		const float mag = magnitude(v);
+
+		return v / mag;
+	}
+
+	inline int rand_range(const int min, const int max)
+	{
+		static bool first = true;
+
+		if(first)
+		{
+			srand(time(nullptr));
+			first = false;
+		}
+
+		return min + (rand() % (max - min + 1));
+	}
+
+	static int get_next_available_id()
+	{
+		static int id = 0;
+		return id++;
+	}
 }

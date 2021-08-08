@@ -4,33 +4,54 @@
 #include "HelperFunctions.h"
 
 Game::Game() :
-	m_ball(
-		{
-	static_cast<float>(constants::k_screenWidth) / 2.f,
-		static_cast<float>(constants::k_screenHeight) / 2
-		}),
-	m_isBallSelected(false),
+	m_isCueBallSelected(false),
 	m_powerBar({ 6.f, 40.f })
 {
+	m_balls[0] = Ball(sf::Vector2f(constants::k_screenWidth / 2.f, constants::k_screenHeight / 2.f), sf::Color::White);
+	m_balls[1] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[2] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[3] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[4] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[5] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[6] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[7] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[8] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[9] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[10] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[11] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[12] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[13] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[14] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	m_balls[15] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	
 }
 
 void Game::Update(const float deltaTime, const int mouseX, const int mouseY, const bool mousePressed)
 {
 	UpdateInput(mouseX, mouseY, mousePressed);
-	m_ball.Update(deltaTime);
+
+	for (auto& ball : m_balls)
+	{
+		ball.Update(deltaTime);
+	}
+
+	CheckCollisions();
 }
 
 void Game::Render(sf::RenderWindow& window)
 {
-	m_ball.Render(window);
+	for (auto& ball : m_balls)
+	{
+		ball.Render(window);
+	}
 
 	// Render the power bar next to the ball
-	if (m_isBallSelected) {
+	if (m_isCueBallSelected) {
 		sf::RectangleShape powerBarOutline({ 8.f, -40.f });
 		powerBarOutline.setFillColor(sf::Color::Black);
 
-		float powerBarXPosition = m_ball.GetPosition().x + 25.f;
-		float powerBarYPosition = m_ball.GetPosition().y + 2 * constants::k_ballRadius;
+		float powerBarXPosition = m_balls[0].GetPosition().x + 25.f;
+		float powerBarYPosition = m_balls[0].GetPosition().y + 2 * constants::k_ballRadius;
 
 		powerBarOutline.setPosition({ powerBarXPosition, powerBarYPosition });
 		window.draw(powerBarOutline);
@@ -43,31 +64,25 @@ void Game::Render(sf::RenderWindow& window)
 
 void Game::UpdateInput(const int mouseX, const int mouseY, const bool mousePressed)
 {
-	if (m_ball.GetState() == eBallState::e_stationary) {
+	if (m_balls[0].GetState() == eBallState::e_stationary) {
 		if (mousePressed)
 		{
-			// Find the distance from the centre of the ball
-			const sf::Vector2f ballCentre{
-				m_ball.GetPosition().x + constants::k_ballRadius,
-				m_ball.GetPosition().y + constants::k_ballRadius
-			};
+			// Find the distance from the centre of the cue ball
+			const sf::Vector2f ballCentre = m_balls[0].GetCentrePosition();
 
 			const sf::Vector2f mouseToBall{ ballCentre.x - static_cast<float>(mouseX) , ballCentre.y - static_cast<float>(mouseY) };
 
-			const float sqrDistance = powf(mouseToBall.x, 2.f) + powf(mouseToBall.y, 2.f);
+			const float sqrDistance = helpers::sqr_magnitude(mouseToBall);
 
 
-			if (m_isBallSelected) {
-				// The distance between the ball and the mouse
-				const float mag = sqrtf(sqrDistance);
-
+			if (m_isCueBallSelected) {
 				// Vector pointing in the right direction
-				m_ballShootVelocity = mouseToBall / mag;
+				m_cueBallShootVelocity = helpers::normalise(mouseToBall);
 
 				// Clamp the distance dragged between the min and max
-				const float clampedDistance = helpers::clamp(constants::k_minMouseDistance, constants::k_maxMouseDistance, mag);
+				const float clampedDistance = helpers::clamp(constants::k_minMouseDistance, constants::k_maxMouseDistance, helpers::magnitude(mouseToBall));
 
-				m_ballShootVelocity *= clampedDistance * constants::k_velocityMultiplier;
+				m_cueBallShootVelocity *= clampedDistance * constants::k_velocityMultiplier;
 
 				// Adjust power bar
 				const float powerPercentage = clampedDistance / constants::k_maxMouseDistance;
@@ -75,23 +90,37 @@ void Game::UpdateInput(const int mouseX, const int mouseY, const bool mousePress
 
 				m_powerBar.setSize({ m_powerBar.getSize().x, -lerpedPowerBarHeight });
 
-				//printf("Distance between mouse and ball: %f\n\n\n", mag);
 			}
 			else
 			{
 				// Select the ball if it's in range
 				if (sqrDistance < powf(constants::k_ballRadius, 2))
 				{
-					printf("Ball Selected\n");
-					m_isBallSelected = true;
+					m_isCueBallSelected = true;
 				}
 			}
 		}
 		else
 		{
-			if (m_isBallSelected) {
-				m_ball.Shoot(m_ballShootVelocity);
-				m_isBallSelected = false;
+			if (m_isCueBallSelected) {
+				m_balls[0].Shoot(m_cueBallShootVelocity);
+				m_isCueBallSelected = false;
+			}
+		}
+	}
+}
+
+void Game::CheckCollisions()
+{
+	for (auto& ball : m_balls)
+	{
+		const sf::Vector2f ballCentre = ball.GetCentrePosition();
+
+		for (auto& otherBall : m_balls)
+		{
+			if (ball.GetId() != otherBall.GetId())
+			{
+				ball.Collide(otherBall);
 			}
 		}
 	}
