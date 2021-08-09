@@ -12,22 +12,22 @@ Game::Game() :
 	TextureManager::GetInstance()->LoadTexture("Resources/Pool_Ball.png", "Ball");
 
 
-	m_balls[0] = Ball(sf::Vector2f(constants::k_screenWidth / 2.f, constants::k_screenHeight / 2.f), eBallType::e_cueBall);
-	m_balls[1] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
-	m_balls[2] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
-	m_balls[3] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
-	m_balls[4] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
-	m_balls[5] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
-	m_balls[6] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
-	m_balls[7] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
-	m_balls[8] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
-	m_balls[9] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
-	m_balls[10] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
-	m_balls[11] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
-	m_balls[12] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
-	m_balls[13] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
-	m_balls[14] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
-	m_balls[15] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_blackBall);
+	m_balls[0] = Ball(sf::Vector2f(183.f, 273.f), eBallType::e_cueBall);
+	m_balls[1] = Ball(sf::Vector2f(500.f, 273.f), eBallType::e_redBall);
+	m_balls[2] = Ball(sf::Vector2f(516.f, 265.f), eBallType::e_redBall);
+	m_balls[3] = Ball(sf::Vector2f(516.f, 281.f), eBallType::e_yellowBall);
+	m_balls[4] = Ball(sf::Vector2f(532.f, 257.f), eBallType::e_yellowBall);
+	m_balls[5] = Ball(sf::Vector2f(532.f, 273.f), eBallType::e_blackBall);
+	m_balls[6] = Ball(sf::Vector2f(532.f, 289.f), eBallType::e_redBall);
+	m_balls[7] = Ball(sf::Vector2f(548.f, 249.f), eBallType::e_redBall);
+	m_balls[8] = Ball(sf::Vector2f(548.f, 265.f), eBallType::e_yellowBall);
+	m_balls[9] = Ball(sf::Vector2f(548.f, 281.f), eBallType::e_redBall);
+	m_balls[10] = Ball(sf::Vector2f(548.f, 297.f), eBallType::e_yellowBall);
+	m_balls[11] = Ball(sf::Vector2f(564.f, 241.f), eBallType::e_yellowBall);
+	m_balls[12] = Ball(sf::Vector2f(564.f, 257.f), eBallType::e_yellowBall);
+	m_balls[13] = Ball(sf::Vector2f(564.f, 273.f), eBallType::e_redBall);
+	m_balls[14] = Ball(sf::Vector2f(564.f, 289.f), eBallType::e_yellowBall);
+	m_balls[15] = Ball(sf::Vector2f(564.f, 305.f), eBallType::e_redBall);
 	
 }
 
@@ -39,8 +39,6 @@ void Game::Update(const float deltaTime, const int mouseX, const int mouseY, con
 	{
 		ball.Update(deltaTime);
 	}
-
-	printf("VelX: %f, VelY: %f\n", m_balls[0].GetVelocity().x, m_balls[0].GetVelocity().y);
 
 	CheckCollisions();
 }

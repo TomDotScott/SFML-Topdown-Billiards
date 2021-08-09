@@ -19,7 +19,6 @@ Ball::Ball(const sf::Vector2f& position, const eBallType type) :
 	m_type(type),
 	m_id(helpers::get_next_available_id())
 {
-	printf("MY ID IS: %i", m_id);
 }
 
 void Ball::Update(const float deltaTime)
@@ -31,12 +30,12 @@ void Ball::Update(const float deltaTime)
 		m_position = m_position + (m_velocity * deltaTime);
 
 		// Check Boundaries
-		if (m_position.x < 0.f && m_velocity.x < 0.f || m_position.x > constants::k_screenWidth - constants::k_ballRadius * 2 && m_velocity.x > 0.f)
+		if (m_position.x < constants::k_tableTopLeft.x && m_velocity.x < 0.f || m_position.x > constants::k_tableBottomRight.x - constants::k_ballRadius * 2 && m_velocity.x > 0.f)
 		{
 			m_velocity.x *= -constants::k_bounceDampen;
 		}
 
-		if (m_position.y < 0.f && m_velocity.y < 0.f || m_position.y > constants::k_screenHeight - constants::k_ballRadius * 2 && m_velocity.y > 0.f)
+		if (m_position.y < constants::k_tableTopLeft.y && m_velocity.y < 0.f || m_position.y > constants::k_tableBottomRight.y - constants::k_ballRadius * 2 && m_velocity.y > 0.f)
 		{
 			m_velocity.y *= -constants::k_bounceDampen;
 		}
@@ -67,7 +66,7 @@ void Ball::Render(sf::RenderWindow& window) const
 		colour = sf::Color::Red;
 		break;
 	case eBallType::e_yellowBall:
-		colour = sf::Color::Yellow;
+		colour = {255, 196, 0, 255};
 		break;
 	case eBallType::e_blackBall: 
 		colour = {21, 34, 56, 255};
