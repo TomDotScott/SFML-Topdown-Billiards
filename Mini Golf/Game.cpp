@@ -2,27 +2,32 @@
 
 #include "Constants.h"
 #include "HelperFunctions.h"
+#include "TextureManager.h"
 
 Game::Game() :
 	m_isCueBallSelected(false),
 	m_powerBar({ 6.f, 40.f })
 {
-	m_balls[0] = Ball(sf::Vector2f(constants::k_screenWidth / 2.f, constants::k_screenHeight / 2.f), sf::Color::White);
-	m_balls[1] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[2] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[3] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[4] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[5] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[6] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[7] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[8] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[9] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[10] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[11] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[12] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[13] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[14] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
-	m_balls[15] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), sf::Color::Red);
+	TextureManager::GetInstance()->LoadTexture("Resources/Pool_Table.png", "Background");
+	TextureManager::GetInstance()->LoadTexture("Resources/Pool_Ball.png", "Ball");
+
+
+	m_balls[0] = Ball(sf::Vector2f(constants::k_screenWidth / 2.f, constants::k_screenHeight / 2.f), eBallType::e_cueBall);
+	m_balls[1] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
+	m_balls[2] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
+	m_balls[3] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
+	m_balls[4] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
+	m_balls[5] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
+	m_balls[6] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
+	m_balls[7] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_redBall);
+	m_balls[8] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
+	m_balls[9] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
+	m_balls[10] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
+	m_balls[11] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
+	m_balls[12] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
+	m_balls[13] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
+	m_balls[14] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_yellowBall);
+	m_balls[15] = Ball(sf::Vector2f(helpers::rand_range(0, constants::k_screenWidth), helpers::rand_range(0, constants::k_screenHeight)), eBallType::e_blackBall);
 	
 }
 
@@ -35,11 +40,15 @@ void Game::Update(const float deltaTime, const int mouseX, const int mouseY, con
 		ball.Update(deltaTime);
 	}
 
+	printf("VelX: %f, VelY: %f\n", m_balls[0].GetVelocity().x, m_balls[0].GetVelocity().y);
+
 	CheckCollisions();
 }
 
 void Game::Render(sf::RenderWindow& window)
 {
+	TextureManager::GetInstance()->DrawTexture("Background", { 0.f, 0.f }, window);
+
 	for (auto& ball : m_balls)
 	{
 		ball.Render(window);

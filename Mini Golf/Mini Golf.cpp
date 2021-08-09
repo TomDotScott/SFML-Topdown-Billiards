@@ -30,7 +30,7 @@ int main()
 
 		const sf::Vector2i mousePosition = sf::Mouse::getPosition(window);
 		
-		window.clear({0, 100, 0});
+		window.clear(/*{0, 100, 0}*/);
 
 		game.Update(deltaTime, mousePosition.x, mousePosition.y, sf::Mouse::isButtonPressed(sf::Mouse::Button::Left));
 		game.Render(window);

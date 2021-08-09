@@ -1,27 +1,24 @@
 #include "Ball.h"
 #include "Constants.h"
 #include "HelperFunctions.h"
+#include "TextureManager.h"
 
 Ball::Ball() :
 	m_position({}),
 	m_velocity({}),
 	m_ballState(eBallState::e_stationary),
+	m_type(eBallType::e_none),
 	m_id(helpers::get_next_available_id())
 {
 }
 
-Ball::Ball(const sf::Vector2f& position, const sf::Color colour) :
+Ball::Ball(const sf::Vector2f& position, const eBallType type) :
 	m_position(position),
 	m_velocity(0.f, 0.f),
 	m_ballState(eBallState::e_stationary),
+	m_type(type),
 	m_id(helpers::get_next_available_id())
 {
-	m_ball.setRadius(constants::k_ballRadius);
-	m_ball.setFillColor(colour);
-	m_ball.setOutlineColor(sf::Color::Black);
-	m_ball.setOutlineThickness(3);
-
-
 	printf("MY ID IS: %i", m_id);
 }
 
@@ -55,11 +52,29 @@ void Ball::Update(const float deltaTime)
 	}
 }
 
-void Ball::Render(sf::RenderWindow& window)
+void Ball::Render(sf::RenderWindow& window) const
 {
-	m_ball.setPosition(m_position);
+	sf::Color colour;
 
-	window.draw(m_ball);
+	switch (m_type) {
+	case eBallType::e_none:
+		colour = { 0, 0, 0, 0 };
+		break;
+	case eBallType::e_cueBall: 
+		colour = sf::Color::White;
+		break;
+	case eBallType::e_redBall:
+		colour = sf::Color::Red;
+		break;
+	case eBallType::e_yellowBall:
+		colour = sf::Color::Yellow;
+		break;
+	case eBallType::e_blackBall: 
+		colour = {21, 34, 56, 255};
+		break;
+	}
+
+	TextureManager::GetInstance()->DrawTexture("Ball", m_position, window, colour);
 }
 
 void Ball::Shoot(const sf::Vector2f& velocity)
@@ -99,6 +114,11 @@ void Ball::SetState(const eBallState state)
 eBallState Ball::GetState() const
 {
 	return m_ballState;
+}
+
+eBallType Ball::GetType() const
+{
+	return m_type;
 }
 
 sf::Vector2f Ball::GetPosition() const

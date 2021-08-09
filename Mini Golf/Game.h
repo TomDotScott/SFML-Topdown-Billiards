@@ -17,6 +17,7 @@ private:
 	bool m_isCueBallSelected;
 
 	sf::RectangleShape m_powerBar;
+	sf::Sprite m_backgroundSprite;
 
 	void UpdateInput(int mouseX, int mouseY, bool mousePressed);
 	void CheckCollisions();
